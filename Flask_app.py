@@ -31,7 +31,6 @@ cursor_removed.execute('''
 ''')
 conn_removed.commit()
 
-app = Flask(__name__)
 
 # Function to fetch all items from the main database
 def get_all_items():
@@ -57,6 +56,7 @@ def get_all_removed_items():
 def encode_image(image):
     return base64.b64encode(image).decode('utf-8')
 
+app = Flask(__name__)
 
 @app.route('/')
 def index():
