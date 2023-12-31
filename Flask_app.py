@@ -2,8 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import base64
 
-app = Flask(__name__)
-
 # Create a connection to the main database (or create it if it doesn't exist)
 conn_main = sqlite3.connect('items_main.db')
 cursor_main = conn_main.cursor()
@@ -33,6 +31,7 @@ cursor_removed.execute('''
 ''')
 conn_removed.commit()
 
+app = Flask(__name__)
 
 # Function to fetch all items from the main database
 def get_all_items():
