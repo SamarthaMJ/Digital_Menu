@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Items - Item Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h2 {
+            padding: 20px;
+            text-align: center;
+        }
+        .item-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .item {
+            background-color: #333333;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 300px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        p {
+            margin: 5px 0;
+            color: #FFFFFF;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #555555;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>View Items</h2>
+    <div class="item-container">
+        {% for item in items %}
+        <div class="item">
+            <p>Serial Number: {{ item[0] }}</p>
+            <img src="data:image/jpeg;base64,{{ encode_image(item[2]) }}" alt="Item Image">
+            <p>Name: {{ item[1] }}</p>
+            <p>Price: {{ item[3] }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

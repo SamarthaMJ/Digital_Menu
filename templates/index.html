@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menu Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            padding: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        a {
+            text-decoration: none;
+            color: #FFFFFF;
+            padding: 10px;
+            display: block;
+            background-color: #333333;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #555555;
+        }
+        
+        /* Responsive Styles */
+        @media screen and (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+            a {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Menu Management System</h1>
+    <ul>
+        <li><a href="{{ url_for('add_item') }}">Add Item</a></li>
+        <li><a href="{{ url_for('remove_item') }}">Remove Item</a></li>
+        <li><a href="{{ url_for('view_items') }}">View Items</a></li>
+        <li><a href="{{ url_for('view_removed_items') }}">View Removed Items</a></li>
+        <li><a href="{{ url_for('restore_item') }}">Restore Item</a></li>
+ 	<li><a href="{{ url_for('display_existing_items') }}">Display Existing Items</a></li>
+    </ul>
+</body>
+</html>
