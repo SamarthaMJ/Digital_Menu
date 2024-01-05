@@ -91,20 +91,21 @@ def remove_item():
     conn_main = sqlite3.connect('items_main.db')
     cursor_main = conn_main.cursor()
     if request.method == 'POST':
-        serial_number = int(request.form['serial_number'])
+        item_name = request.form['item_name']
 
-        cursor_main.execute('SELECT * FROM items WHERE id = ?', (serial_number,))
+        cursor_main.execute('SELECT * FROM items WHERE name = ?', (item_name,))
         removed_item = cursor_main.fetchone()
 
         if removed_item:
-            cursor_main.execute('DELETE FROM items WHERE id = ?', (serial_number,))
+            cursor_main.execute('DELETE FROM items WHERE name = ?', (item_name,))
             conn_main.commit()
 
             cursor_removed.execute('INSERT INTO removed_items (name, image, price) VALUES (?, ?, ?)', removed_item[1:])
             conn_removed.commit()
 
+            # Redirect to the view_items route after removal
             return redirect(url_for('index'))
-    return render_template('remove_item.html')
+    return render_template('view_items.html', items=get_all_items(), encode_image=encode_image)
 
 
 @app.route('/view_items')
@@ -133,20 +134,20 @@ def restore_item():
     cursor_removed = conn_removed.cursor()
 
     if request.method == 'POST':
-        serial_number = int(request.form['serial_number'])
+        item_name = request.form['item_name']  # Fetch item name instead of serial number
 
-        cursor_removed.execute('SELECT * FROM removed_items WHERE id = ?', (serial_number,))
+        cursor_removed.execute('SELECT * FROM removed_items WHERE name = ?', (item_name,))
         restored_item = cursor_removed.fetchone()
 
         if restored_item:
-            cursor_removed.execute('DELETE FROM removed_items WHERE id = ?', (serial_number,))
+            cursor_removed.execute('DELETE FROM removed_items WHERE name = ?', (item_name,))
             conn_removed.commit()
 
             cursor_main.execute('INSERT INTO items (name, image, price) VALUES (?, ?, ?)', restored_item[1:])
             conn_main.commit()
 
             return redirect(url_for('index'))
-    return render_template('restore_item.html')
+    return render_template('view_removed_items.html')
 
 
 if __name__ == '__main__':
