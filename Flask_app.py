@@ -1,7 +1,10 @@
+import io
+
+import PIL.Image
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import base64
-
+from PIL import Image
 
 # Create a connection to the main database (or create it if it doesn't exist)
 conn_main = sqlite3.connect('items_main.db')
@@ -66,17 +69,44 @@ def index():
     return render_template('index.html')
 
 
+# Function to resize image to 1024x1024 pixels
+def resize_image(image):
+    img = Image.open(image)
+    img = img.resize((1024, 1024), PIL.Image.LANCZOS)
+    return img
+
+
 @app.route('/add_item', methods=['GET', 'POST'])
 def add_item():
     conn_main = sqlite3.connect('items_main.db')
     cursor_main = conn_main.cursor()
     if request.method == 'POST':
         name = request.form['name']
-        image = request.files['image_path']  # Access the uploaded file
+        image = request.files['image_path']
         price = float(request.form['price'])
 
         if image:
-            image_binary = image.read()  # Read the file contents
+            # Resize the image before saving
+            resized_image = resize_image(image)
+            img_io = io.BytesIO()
+
+            # Get the file extension in lowercase
+            file_extension = image.filename.split('.')[-1].lower()
+
+            # Map common extensions to PIL formats
+            PIL_formats = {
+                'jpg': 'JPEG',
+                'jpeg': 'JPEG',
+                'png': 'PNG',
+                'gif': 'GIF'
+                # Add more if needed
+            }
+
+            # Save the image using the appropriate format
+            pil_format = PIL_formats.get(file_extension, 'JPEG')  # Default to JPEG if extension not found
+            resized_image.save(img_io, format=pil_format)
+            image_binary = img_io.getvalue()
+
             cursor_main.execute('INSERT INTO items (name, image, price) VALUES (?, ?, ?)', (name, image_binary, price))
             conn_main.commit()
 
