@@ -99,6 +99,12 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #45a049;
 }
+.error {
+            color: #ff6347; /* Tomato color */
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
 
     </style>
 </head>
@@ -106,17 +112,20 @@ button[type="submit"]:hover {
 <h1>Edit Special Item</h1>
     <div class="container">
         
-        <form action="/update_special_item" method="post" enctype="multipart/form-data">
+        <form id="editSpecialItemForm" action="/update_special_item" method="post" enctype="multipart/form-data">
             <input type="hidden" name="item_id" value="{{ special_item[0] }}">
-            <label for="name">Name:</label><br>
+            <label for="name">Name:</label>
             <input type="text" id="name" name="name" value="{{ special_item[1] }}"><br>
-            <label for="price">Price:</label><br>
-            <input type="number" id="price" name="price" value="{{ special_item[3] }}"><br>
+            <span id="nameError" class="error"></span><br>
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" value="{{ special_item[3] }}">
+            <span id="priceError" class="error"></span><br>
             <div class="image-container">
                 <label for="image" class="image-picker-label">Choose Image</label>
                 <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this);">
-                <img id="image-preview" class="image-preview" src="" alt="">
+                <img id="image-preview" class="image-preview" src="" alt="Image Preview">
             </div>
+            <span id="imageError" class="error"></span><br>
             <select name="category">
                 <option value="North Indian" {% if special_item[4] == 'North Indian' %}selected{% endif %}>North Indian</option>
                 <option value="South Indian" {% if special_item[4] == 'South Indian' %}selected{% endif %}>South Indian</option>
@@ -127,10 +136,43 @@ button[type="submit"]:hover {
                 <option value="Starters" {% if special_item[4] == 'Starters' %}selected{% endif %}>Starters</option>
                 <!-- Add more options as needed -->
             </select><br>
-            <button type="submit">Update</button>
+            <button type="submit" onclick="return validateForm()">Update</button>
         </form>
     </div>
     <script>
+        function validateForm() {
+            var name = document.getElementById("name").value;
+            var price = document.getElementById("price").value;
+            var image = document.getElementById("image").files[0];
+
+            var nameError = document.getElementById("nameError");
+            var priceError = document.getElementById("priceError");
+            var imageError = document.getElementById("imageError");
+
+            // Reset error messages
+            nameError.innerHTML = "";
+            priceError.innerHTML = "";
+            imageError.innerHTML = "";
+
+            // Basic validation for name, price, and image
+            if (name.trim() === '') {
+                nameError.innerHTML = "Please enter the name.";
+                return false;
+            }
+
+            if (price.trim() === '') {
+                priceError.innerHTML = "Please enter the price.";
+                return false;
+            }
+
+            if (!image) {
+                imageError.innerHTML = "Please select an image.";
+                return false;
+            }
+
+            return true;
+        }
+
         // JavaScript to handle image preview
         function previewImage(input) {
             var preview = document.getElementById('image-preview');
