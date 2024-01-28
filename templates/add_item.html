@@ -11,15 +11,18 @@
             margin: 0;
             padding: 0;
         }
+
         form {
             padding: 20px;
             max-width: 400px;
             margin: 0 auto;
         }
+
         label {
             display: block;
             margin-bottom: 5px;
         }
+
         input[type="text"],
         input[type="file"],
         input[type="checkbox"],
@@ -34,6 +37,7 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+
         input[type="text"]:focus,
         input[type="file"]:focus,
         input[type="checkbox"]:focus,
@@ -42,49 +46,88 @@
             outline: none;
             border-color: #888888;
         }
+
         input[type="checkbox"] {
-            transform: scale(2.0); /* Adjust the scale factor to increase or decrease the size */
-            margin-right: 5px; /* Add some spacing to separate the checkbox from the label */
+            transform: scale(2.0);
+            margin-right: 5px;
         }
+
         input[type="submit"] {
             background-color: #1E90FF;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         input[type="submit"]:hover {
             background-color: #0066CC;
+        }
+
+        .error {
+            color: #ff6347; /* Tomato color */
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <h2>Add Item</h2>
-    <form method="post" enctype="multipart/form-data" action="/add_item" onsubmit="showNotification('Item added successfully!')">
+    <form id="addItemForm" method="post" enctype="multipart/form-data" action="/add_item">
         <label for="name">Item Name:</label>
         <input type="text" id="name" name="name">
+        <span id="nameError" class="error"></span>
 
         <label for="image_path">Image Path:</label>
         <input type="file" id="image_path" name="image_path">
+        <span id="imagePathError" class="error"></span>
 
         <label for="price">Price:</label>
         <input type="text" id="price" name="price">
+        <span id="priceError" class="error"></span>
 
         <label for="category">Category:</label>
         <select id="category" name="category">
             <option value="North Indian">North Indian</option>
             <option value="South Indian">South Indian</option>
             <option value="Chinese">Chinese</option>
-	    <option value="Chats">Chats</option>
- 	    <option value="Thalis">Thalis</option>
-	    <option value="Juice/Ice cream">Juice/Ice cream</option>
-	    <option value="Starters">Starters</option>
-            <!-- Add more categories as needed -->
+            <option value="Chats">Chats</option>
+            <option value="Thalis">Thalis</option>
+            <option value="Juice/Ice cream">Juice/Ice cream</option>
+            <option value="Starters">Starters</option>
         </select>
 
         <label for="special">Special Item:</label>
         <input type="checkbox" id="special" name="special">
 
-        <input type="submit" value="Add">
+        <input type="submit" value="Add" onclick="return validateForm()">
     </form>
+
+    <script>
+        function validateForm() {
+            var name = document.getElementById("name").value;
+            var imagePath = document.getElementById("image_path").value;
+            var price = document.getElementById("price").value;
+
+            // Reset error messages
+            document.getElementById("nameError").innerHTML = "";
+            document.getElementById("imagePathError").innerHTML = "";
+            document.getElementById("priceError").innerHTML = "";
+
+            // Basic validation for name, image path, and price
+            if (name.trim() == "") {
+                document.getElementById("nameError").innerHTML = "Please enter item name.";
+                return false;
+            }
+            if (imagePath.trim() == "") {
+                document.getElementById("imagePathError").innerHTML = "Please select an image.";
+                return false;
+            }
+            if (price.trim() == "" || isNaN(price)) {
+                document.getElementById("priceError").innerHTML = "Please enter a valid price.";
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </body>
 </html>
