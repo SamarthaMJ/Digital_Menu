@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Special Items</title>
+    <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 20px;
+        background-color: #121212;
+        color: #FFFFFF; /* Set all text to white */
+    }
+
+    h2, h3 {
+        color: white; /* Orange Red */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        color: #FFFFFF; /* Set text color to white */
+    }
+
+    th {
+        background-color: black;
+    }
+
+    img {
+        max-width: 50px;
+        max-height: 50px;
+        border-radius: 5px;
+    }
+
+    .remove-button{
+        background-color: #FF4500; /* Red color */
+        color: #FFFFFF; /* White text */
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+	.edit-button {
+		background-color:#4CAF50;
+        color: #FFFFFF; /* White text */
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+	}
+	.edit-button:hover{
+		background-color:#45a049;; 
+	}
+    .remove-button:hover {
+        background-color: #d32f2f; /* Darker red on hover */
+    }
+    </style>
+</head>
+<body>
+    <h2>View Special Items</h2>
+    {% for category, special_items in grouped_special_items.items() %}
+        <h3>{{ category }}</h3>
+        <table>
+            <tr>
+		<th>ID</th>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Action</th>
+                <th>Action</th>
+            </tr>
+            {% for special_item in special_items %}
+                <tr>
+		    <td>{{special_item[0]}}</td>
+                    <td>{{ special_item[1] }}</td>
+                    <td><img src="data:image/jpeg;base64,{{ encode_image(special_item[2]) }}" alt="Special Item Image"></td>
+                    <td>₹{{ special_item[3] }}</td>
+                    <td>
+                        <form action="/edit_special_item" method="post">
+                            <input type="hidden" name="item_id" value="{{ special_item[0] }}">
+                            <input type="submit" class="edit-button" value="Edit">
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/remove_special_item" method="post">
+                            <input type="hidden" name="item_id" value="{{ special_item[0] }}">
+                            <input type="submit" class="remove-button" value="Remove">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+</body>
+</html>

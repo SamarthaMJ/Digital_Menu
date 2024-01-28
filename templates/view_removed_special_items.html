@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Removed Special Items</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            padding: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .restore-button {
+            background-color: #32CD32; /* Lime Green */
+            color: #FFFFFF;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .restore-button:hover {
+            background-color: #00FF00; /* Green */
+        }
+		.item-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .item {
+            background-color: #333333;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 300px;
+			}
+		.center-container {
+			text-align:center;
+		}
+    </style>
+</head>
+
+<body>
+    <h2>View Removed Special Items</h2>
+    {% for category, removed_special_items in grouped_removed_special_items.items() %}
+        <h3>{{ category }}</h3>
+        <div class="item-container">
+            {% for removed_special_item in removed_special_items %}
+                <div class="item">
+                    <p style="text-align:center;"><b>{{ removed_special_item[1] }}</b></p>
+                    <img src="data:image/jpeg;base64,{{ encode_image(removed_special_item[2]) }}" alt="Removed Special Item Image">
+                    <p style="text-align:center;"><b>₹{{ removed_special_item[3] }}</b></p>
+                    <form action="/restore_special_item" method="post">
+                        <input type="hidden" name="item_id" value="{{ removed_special_item[0] }}">
+                        <div class="center-container"><button type="submit">Restore</button></div>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+        <hr>
+    {% endfor %}
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Special Item</title>
+    <style>
+		body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #222;
+    color: #fff;
+}
+
+.container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: white;
+}
+
+label {
+    font-weight: bold;
+    color: #ddd;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #444;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.image-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.image-picker-label {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.image-picker-label:hover {
+    background-color: #45a049;
+}
+
+#image-preview {
+    max-width: 200px;
+    max-height: 200px;
+    display: block;
+    margin-top: 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+select {
+    background-color: #444;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 4px;
+}
+
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+    </style>
+</head>
+<body>
+<h1>Edit Special Item</h1>
+    <div class="container">
+        
+        <form action="/update_special_item" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="item_id" value="{{ special_item[0] }}">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" value="{{ special_item[1] }}"><br>
+            <label for="price">Price:</label><br>
+            <input type="number" id="price" name="price" value="{{ special_item[3] }}"><br>
+            <div class="image-container">
+                <label for="image" class="image-picker-label">Choose Image</label>
+                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this);">
+                <img id="image-preview" class="image-preview" src="" alt="">
+            </div>
+            <select name="category">
+                <option value="North Indian" {% if special_item[4] == 'North Indian' %}selected{% endif %}>North Indian</option>
+                <option value="South Indian" {% if special_item[4] == 'South Indian' %}selected{% endif %}>South Indian</option>
+                <option value="Chinese" {% if special_item[4] == 'Chinese' %}selected{% endif %}>Chinese</option>
+                <option value="Chats" {% if special_item[4] == 'Chats' %}selected{% endif %}>Chats</option>
+                <option value="Thalis" {% if special_item[4] == 'Thalis' %}selected{% endif %}>Thalis</option>
+                <option value="Juice/Ice cream" {% if special_item[4] == 'Juice/Ice cream' %}selected{% endif %}>Juice/Ice cream</option>
+                <option value="Starters" {% if special_item[4] == 'Starters' %}selected{% endif %}>Starters</option>
+                <!-- Add more options as needed -->
+            </select><br>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+    <script>
+        // JavaScript to handle image preview
+        function previewImage(input) {
+            var preview = document.getElementById('image-preview');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>

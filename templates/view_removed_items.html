@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Removed Items - Item Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h2 {
+            padding: 20px;
+            text-align: center;
+        }
+        .item-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .item {
+            background-color: #333333;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 300px;
+            text-align: center; /* Center the content */
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        p {
+            margin: 5px 0;
+            color: #FFFFFF;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #555555;
+            margin: 10px 0;
+        }
+        form {
+            margin-top: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+		.center-container {
+			text-align:center;
+		}
+    </style>
+</head>
+<body>
+    <h2>View Removed Items</h2>
+    {% for category, removed_items in grouped_removed_items.items() %}
+        <h3>{{ category }}</h3>
+        <div class="item-container">
+            {% for removed_item in removed_items %}
+                <div class="item">
+                    <p style="text-align:center;"><b>{{ removed_item[1] }}</b></p>
+                    <img src="data:image/jpeg;base64,{{ encode_image(removed_item[2]) }}" alt="Removed Item Image">
+                    <p style="text-align:center;"><b>₹{{ removed_item[3] }}</b></p>
+                    <form action="/restore_item" method="post">
+                        <input type="hidden" name="item_name" value="{{ removed_item[1] }}">
+                        <div class="center-container"><button type="submit">Restore</button></div>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+        <hr>
+    {% endfor %}
+</body>
+</html>
